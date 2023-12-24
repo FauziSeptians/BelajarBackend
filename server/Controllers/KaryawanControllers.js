@@ -1,5 +1,4 @@
 const KaryawanModel = require("../Model/KaryawanModel");
-const asyncHandler = require("express-async-handler");
 const Joi = require("joi");
 
 exports.CreateKaryawanData = async (req, res, next) => {

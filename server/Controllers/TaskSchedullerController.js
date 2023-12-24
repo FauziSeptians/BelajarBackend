@@ -1,28 +1,20 @@
-const { exist } = require("joi");
 const JadwalPekerjaModel = require("../Model/JadwalPekerjaModel");
 const Karyawan = require("../Model/KaryawanModel");
 const getDateNow = require("../lib/getDateNow");
-const NodeWebcam = require("node-webcam");
-
-const Webcam = NodeWebcam.create({
-   width: 1280,
-   height: 720,
-   quality: 100,
-   output: "jpeg",
-   callbackReturn: "buffer",
-});
 
 exports.AbsenMasuk = async (req, res) => {
    // masuk ke perusahaan dan absen
    const { Nama, Password } = req.body;
-   // MASUKAN DATA FOTO
-   const image = await captureImage();
 
    try {
       let dataID = await Karyawan.findOne(
          { Nama: Nama, Password: Password },
          "_id"
       );
+
+      if (dataID == null) {
+         throw new Error("dataId not found");
+      }
       let existData = await JadwalPekerjaModel.findOne({
          IDPekerja: dataID,
          TanggalMasuk: getDateNow(new Date()),
@@ -41,6 +33,9 @@ exports.AbsenMasuk = async (req, res) => {
          jadwal.JamMasuk =
             date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
          jadwal.IDPekerja = dataID;
+         jadwal.Photo = `assets/Karyawan/${Nama}/${Nama}-${date.getDate()}${
+            date.getMonth() + 1
+         }${date.getFullYear()}`;
          jadwal.save();
 
          if (dataID) {
@@ -76,7 +71,7 @@ exports.UpdatePulang = async (req, res) => {
       );
 
       let exists = await JadwalPekerjaModel.findOne(
-         { IDPekerja: dataID },
+         { IDPekerja: dataID, TanggalMasuk: getDateNow(new Date()) },
          "_id"
       );
 

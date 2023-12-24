@@ -14,10 +14,13 @@ const JadwalPekerjaSchema = new Schema({
    Keterangan: {
       type: String,
    },
-   IDPekerja :{
-       type : Schema.Types.ObjectId,
-       ref : 'Karyawan',
-   }
+   Photo: {
+     type : String,
+   },
+   IDPekerja: {
+      type: Schema.Types.ObjectId,
+      ref: "Karyawan",
+   },
 });
 
 const JadwalPekerjaModel = new mongoose.model(
