@@ -21,3 +21,7 @@ body {
    font-size: "18px";
    font-family: "Poppins", sans-serif;
 }
+
+.css-1anqmj6-MuiPopper-root-MuiPickersPopper-root {
+   z-index: 1000000000 !important;
+}

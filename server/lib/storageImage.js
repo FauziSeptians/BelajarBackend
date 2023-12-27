@@ -5,6 +5,7 @@ const fs = require("fs");
 
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
+      console.log(req.body.name);
       let namaKaryawan = req.body.Nama;
 
       if (fs.existsSync(`assets/Karyawan/${namaKaryawan}`)) {
@@ -20,6 +21,8 @@ const storage = multer.diskStorage({
       // Menentukan folder penyimpanan (dalam contoh ini: 'uploads/')
    },
    filename: (req, file, cb) => {
+      console.log("file");
+      console.log(file);
       let namaKaryawan = req.body.Nama;
       // Menentukan nama file yang diunggah (terserah Anda)
 

@@ -1,12 +1,8 @@
-import { Inter } from "next/font/google";
-import { useState } from "react";
 import axios from "axios";
-import ConvertTanggal from "../../../lib/TanggalConvert";
-import ConvertJam from "../../../lib/JamConvert";
+import JamConvert from "../../../../lib/JamConvert";
 
-export default function TaskManagement({ dataObject }) {
+export default function TaskManagementKaryawan({ dataObject }) {
    console.log(dataObject);
-   console.log(dataObject.dataTask);
    return (
       <section className=" w-full ">
          <div className="content w-full h-screen">
@@ -28,28 +24,32 @@ export default function TaskManagement({ dataObject }) {
                <div className="flex flex-col gap-5 mt-3 text-center font-semibold tracking-wider">
                   <div className="grid grid-cols-12 bg-[#00000030] p-3">
                      <div className="col-span-1 ">No</div>
-                     <div className="col-span-3 ">Tanggal Masuk</div>
-                     <div className="col-span-2 ">Jam Masuk</div>
-                     <div className="col-span-2 ">Jam Keluar</div>
-                     <div className="col-span-4 ">Keterangan Pekerjaan</div>
+                     <div className="col-span-3 ">Nama</div>
+                     <div className="col-span-2 ">Tanggal Masuk</div>
+                     <div className="col-span-2 ">Jam Kerja</div>
+                     <div className="col-span-4 ">Deskripsi</div>
                   </div>
                </div>
-               {dataObject.dataTask.length != 0 ? (
-                  dataObject.dataTask.map((item, index) => {
+               {dataObject.dataAllTaskKaryawan.length != 0 ? (
+                  dataObject.dataAllTaskKaryawan.map((item, index) => {
                      return (
                         <div className="flex flex-col gap-5 text-center">
                            <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
                               <div className="col-span-1 ">{index + 1}</div>
                               <div className="col-span-3  ">
+                                 {item.IDPekerja.Nama}
+                              </div>
+                              <div className="col-span-2 ">
                                  {item.TanggalMasuk}
                               </div>
                               <div className="col-span-2 ">
-                                 {ConvertJam(item.JamMasuk)}
-                              </div>
-                              <div className="col-span-2 ">
+                                 {item.JamMasuk
+                                    ? JamConvert(item.JamMasuk)
+                                    : ""}{" "}
+                                 -{" "}
                                  {item.JamKeluar
-                                    ? ConvertJam(item.JamKeluar)
-                                    : "-"}
+                                    ? JamConvert(item.JamKeluar)
+                                    : ""}
                               </div>
                               <div className="col-span-4 break-all p-3">
                                  {item.Keterangan ? item.Keterangan : "-"}
@@ -76,53 +76,25 @@ export default function TaskManagement({ dataObject }) {
 }
 
 export async function getServerSideProps(context) {
-   const { query } = context;
-   let Nama = query.id;
-   console.log(Nama);
    try {
-      const validateRes = await axios.post(
-         "http://localhost:5000/validateUser",
-         {
-            Nama: Nama,
-            Token: context.req.cookies.access_token,
-         },
-         {
+      console.log("test");
+
+      const response = await axios
+         .get("http://localhost:5000/getAllTaskKaryawan", {
             headers: {
-               Authorization: "bearer " + context.req.cookies.access_token,
+               Authorization: "Bearer " + context.req.cookies.access_token,
             },
-         }
-      );
+         })
+         .catch((err) => console.log(err.message));
 
-      console.log(validateRes.data);
-
-      if (validateRes.data.status == 200) {
-         const res = await axios.post("http://localhost:3000/api/getalltask", {
-            Nama: Nama,
-            Token: context.req.cookies.access_token,
-         });
-
-         let dataObject = {
-            User: validateRes.data.additionalData.Nama,
-            dataTask: res.data,
-         };
-
-         console.log(dataObject);
-         return {
-            props: { dataObject },
-         };
-      } else {
-         context.res.setHeader(
-            "Set-Cookie",
-            "access_token=; Max-Age=0; Path=/; HttpOnly"
-         );
-         context.res.writeHead(302, { Location: "/" });
-         context.res.end();
-         return { props: {} }; // Penting untuk memberikan nilai props kosong saat melakukan redirect
-      }
-   } catch (error) {
-      console.error("Error fetching data:", error);
-      return {
-         props: { error: error.message },
+      let dataAllTaskKaryawan = response.data.additionalData;
+      const dataObject = {
+         User: context.query.id,
+         dataAllTaskKaryawan: dataAllTaskKaryawan,
       };
-   }
+
+      return {
+         props: { dataObject },
+      };
+   } catch (error) {}
 }

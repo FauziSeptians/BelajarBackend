@@ -18,6 +18,9 @@ const KaryawanSchema = new Schema({
       min: 10,
       max: 12,
    },
+   Role: {
+      type: String,
+   },
    Umur: {
       type: Number,
       min: 0,
@@ -29,13 +32,12 @@ const KaryawanSchema = new Schema({
          validator: function (value) {
             return value <= new Date();
          },
-         message: (props) =>
-            `Tanggal Masuk tidak bisa lebih dari sekarang`,
+         message: (props) => `Tanggal Masuk tidak bisa lebih dari sekarang`,
       },
    },
    Password: {
       type: String,
-      minLength : 8,
+      minLength: 8,
    },
 });
 

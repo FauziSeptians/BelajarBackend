@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const cors = require("cors");
 const app = express();
 const KaryawanControllers = require("./Controllers/KaryawanControllers");
 const TaskSchedullerController = require("./Controllers/TaskSchedullerController");
@@ -13,6 +14,7 @@ const port = 5000;
 
 connectDB();
 app.use(express.json());
+app.use(cors());
 const upload = multer({ storage });
 
 app.listen(port, () => {
@@ -32,6 +34,10 @@ app.post(
    TaskSchedullerController.AbsenMasuk
 );
 app.post("/UpdatePulang", TaskSchedullerController.UpdatePulang);
+app.post("/getAllData", TaskSchedullerController.getAlltask);
+app.post("/validateUser", KaryawanControllers.validateLoginKaryawan);
+app.get("/getAllKaryawan", KaryawanControllers.getAllKaryawan);
+app.get("/getAllTaskKaryawan", TaskSchedullerController.getAlltaskKaryawan);
 
 app.get("/images/:ImageName", (req, res) => {
    const { ImageName } = req.params;

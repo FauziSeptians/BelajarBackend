@@ -5,15 +5,22 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { User } from "@nextui-org/react";
 
-export default function Pekerja({ Data, Modals }) {
+export default function Admin({ Data, Modals }) {
    const Username = Data.Nama;
    const routes = useRouter(null);
-   const dates = new Date();
-   const jamsekarang = dates.getHours();
 
-   function pushPath() {
+   function PushDataKaryawan() {
       routes.push({
-         pathname: "/taskmanagement",
+         pathname: "/adminpage/datakaryawan",
+         query: {
+            id: Username,
+         },
+      });
+   }
+
+   function PushDataTaskKaryawan() {
+      routes.push({
+         pathname: "/adminpage/taskmanagementKaryawan",
          query: {
             id: Username,
          },
@@ -39,60 +46,16 @@ export default function Pekerja({ Data, Modals }) {
                   <div className="text-[20px] font-semibold tracking-[0.5px] pb-2 ">
                      Home Page
                   </div>
+
                   <div className="grid grid-cols-3 gap-7 mt-3">
                      <div
-                        className={`shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]`}
+                        className="shadow-md p-5 min-h-[200px] rounded-xl flex justify-between items-center gap-6 cursor-pointer bg-[#ffffff72]"
                         onClick={() =>
                            Modals({
-                              type: "Masuk",
+                              type: "BuatDataKaryawan",
                               Nama: Username,
                            })
                         }
-                     >
-                        <div>
-                           <img
-                              src="./assets/kalender.jpg"
-                              width={80}
-                              className="mb-3"
-                           ></img>
-                           <div className="text-[20px] font-semibold tracking-[1px]">
-                              ABSENSI Masuk
-                           </div>
-                           <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
-                           </div>
-                        </div>
-                        <div className="font-semibold">{">"}</div>
-                     </div>
-                     <div
-                        className="shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]"
-                        onClick={() =>
-                           Modals({
-                              type: "Pulang",
-                              Nama: Username,
-                           })
-                        }
-                     >
-                        <div>
-                           <img
-                              src="./assets/kalender.jpg"
-                              width={80}
-                              className="mb-3"
-                           ></img>
-                           <div className="text-[20px] font-semibold tracking-[1px]">
-                              ABSENSI Pulang
-                           </div>
-                           <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
-                           </div>
-                        </div>
-                        <div className="font-semibold">{">"}</div>
-                     </div>
-                     <div
-                        className="shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]"
-                        onClick={() => pushPath()}
                      >
                         <div>
                            <img
@@ -101,7 +64,46 @@ export default function Pekerja({ Data, Modals }) {
                               className="mb-3"
                            ></img>
                            <div className="text-[20px] font-semibold tracking-[1px]">
-                              Manajemen Tugas
+                              Buat Data Karyawan
+                           </div>
+                           <div className="text-[16px] text-[#000000ac]">
+                              Data Kehadiranmu dari kamu masuk kerja dan pulang
+                              kerja
+                           </div>
+                        </div>
+                        <div className="font-semibold">{">"}</div>
+                     </div>
+                     <div
+                        className={`shadow-md p-5 min-h-[200px] rounded-xl flex justify-between items-center gap-6 cursor-pointer bg-[#ffffff72]`}
+                        onClick={() => PushDataKaryawan()}
+                     >
+                        <div>
+                           <img
+                              src="./assets/kalender.jpg"
+                              width={80}
+                              className="mb-3"
+                           ></img>
+                           <div className="text-[20px] font-semibold tracking-[1px]">
+                              Data Karyawan
+                           </div>
+                           <div className="text-[16px] text-[#000000ac]">
+                              Data Karyawan perusahaanmu
+                           </div>
+                        </div>
+                        <div className="font-semibold">{">"}</div>
+                     </div>
+                     <div
+                        className="shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]"
+                        onClick={() => PushDataTaskKaryawan()}
+                     >
+                        <div>
+                           <img
+                              src="./assets/kalender.jpg"
+                              width={80}
+                              className="mb-3"
+                           ></img>
+                           <div className="text-[20px] font-semibold tracking-[1px]">
+                              Data Pekerjaan Karyawan
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
                               Data Kehadiranmu dari kamu masuk kerja dan pulang
@@ -120,11 +122,11 @@ export default function Pekerja({ Data, Modals }) {
 
 export async function getServerSideProps(context) {
    const { query, req } = context;
-   
 
    let Data = {
       Nama: query.id,
       access_token: req.cookies.access_token,
    };
+
    return { props: { Data } };
 }

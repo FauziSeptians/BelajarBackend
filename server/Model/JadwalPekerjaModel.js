@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const JadwalPekerjaSchema = new Schema({
    TanggalMasuk: {
-      type: Date,
+      type: String,
    },
    JamMasuk: {
       type: String,
@@ -15,7 +15,7 @@ const JadwalPekerjaSchema = new Schema({
       type: String,
    },
    Photo: {
-     type : String,
+      type: String,
    },
    IDPekerja: {
       type: Schema.Types.ObjectId,
