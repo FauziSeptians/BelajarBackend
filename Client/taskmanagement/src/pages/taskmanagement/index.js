@@ -3,23 +3,20 @@ import { useState } from "react";
 import axios from "axios";
 import ConvertTanggal from "../../../lib/TanggalConvert";
 import ConvertJam from "../../../lib/JamConvert";
+import Greetings from "../component/greetings";
 
-export default function TaskManagement({ dataObject }) {
+export default function TaskManagement({ dataObject, Modals }) {
+   const Username = dataObject.User;
    console.log(dataObject);
    console.log(dataObject.dataTask);
    return (
       <section className=" w-full ">
          <div className="content w-full h-screen">
             <div className="Greetings text-[20px]">
-               <div className="text-[28px] font-semibold tracking-[2px]">
-                  Hi,{" "}
-                  <span className="text-[24px] font-light tracking-[1px]">
-                     {dataObject.User}
-                  </span>
-               </div>
-               <div className="font-light text-[#000000ac]">
-                  Motivational Quotes
-               </div>
+               <Greetings
+                  Username={Username}
+                  Modals={(e) => Modals(e)}
+               ></Greetings>
             </div>
             <div className="mt-7 TaskManagement ">
                <div className="text-[20px] font-semibold tracking-[0.5px] pb-2 ">

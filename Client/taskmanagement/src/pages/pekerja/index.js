@@ -4,6 +4,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { User } from "@nextui-org/react";
+import Greetings from "../component/greetings";
 
 export default function Pekerja({ Data, Modals }) {
    const Username = Data.Nama;
@@ -25,15 +26,10 @@ export default function Pekerja({ Data, Modals }) {
          <section className=" w-full relative">
             <div className="content w-full h-screen">
                <div className="Greetings text-[20px]">
-                  <div className="text-[28px] font-semibold tracking-[2px]">
-                     Hi,{" "}
-                     <span className="text-[24px] font-light tracking-[1px]">
-                        {Username}
-                     </span>
-                  </div>
-                  <div className="font-light text-[#000000ac]">
-                     Motivational Quotes
-                  </div>
+                  <Greetings
+                     Username={Username}
+                     Modals={(e) => Modals(e)}
+                  ></Greetings>
                </div>
                <div className="mt-7 TaskManagement">
                   <div className="text-[20px] font-semibold tracking-[0.5px] pb-2 ">
@@ -120,7 +116,6 @@ export default function Pekerja({ Data, Modals }) {
 
 export async function getServerSideProps(context) {
    const { query, req } = context;
-   
 
    let Data = {
       Nama: query.id,

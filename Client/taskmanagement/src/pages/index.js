@@ -53,6 +53,7 @@ export default function Home() {
                }
             );
          } else {
+            console.log(response.data.message);
             setMessageLogin(response.data.message);
             setTimeout(() => {
                setMessageLogin(null);
@@ -62,6 +63,8 @@ export default function Home() {
          console.error("Error:", error.response); // Tampilkan detail kesalahan dari server
       }
    };
+
+   console.log(messageLogin);
 
    console.log("tokenns", Cookies.get("access_token"));
 
@@ -137,4 +140,16 @@ export default function Home() {
          </section>
       </>
    );
+}
+
+export async function getServerSideProps(context) {
+   //menghilangkan token
+   context.res.setHeader(
+      "Set-Cookie",
+      "access_token=; Max-Age=0; Path=/; HttpOnly"
+   );
+
+   return {
+      props: {},
+   };
 }

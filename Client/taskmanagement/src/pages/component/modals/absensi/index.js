@@ -8,8 +8,17 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import HitungUmur from "../../../../../lib/menghitungUmur";
+import { useRouter } from "next/router";
+import { FormatCurrency } from "../../../../../lib/formatCurrency";
 
-const Absensi = ({ statusModal, Nama, formType, message }) => {
+export default function Absensi({
+   statusModal,
+   Nama,
+   formType,
+   message,
+   serverData,
+}) {
+   console.log(serverData);
    const [Message, setMessage] = useState("");
    const [Password, setPassword] = useState("");
    const [ImageData, setImageData] = useState(null);
@@ -17,7 +26,37 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
    const [TanggalLahirPendaftar, setTanggalLahirPendaftar] = useState(null);
    const [NamaPendaftar, setNamaPendaftar] = useState(null);
    const [NotlpPendaftar, setNotlpPendaftar] = useState(null);
+   const [dataPembukuan, setDataPembukuan] = useState({}); //
+   const routes = useRouter(null);
    console.log(formType);
+
+   console.log(Cookies.get("access_token"));
+
+   useEffect(() => {
+      const getDataPembukuan = async () => {
+         console.log("hallo");
+         const response = await axios
+            .post("/api/summarypembukuan")
+            .catch((error) => {
+               console.log(error);
+            });
+
+         const { DataPengeluaran, DataPendapatan, DataHasil } =
+            response.data.additionalData;
+
+         setDataPembukuan({
+            DataPengeluaran: DataPengeluaran,
+            DataPendapatan: DataPendapatan,
+            DataHasil: DataHasil,
+         });
+
+         console.log(response.data);
+      };
+
+      getDataPembukuan();
+   }, []);
+
+   console.log(dataPembukuan);
 
    async function SubmitAbsensi() {
       if (formType == "Masuk") {
@@ -92,6 +131,8 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
          } else {
             message(response.data.message);
          }
+      } else if (formType == "Pulang") {
+         statusModal();
       }
    }
    const [urlIMG, setUrlIMG] = useState(null);
@@ -102,6 +143,19 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
          console.log(urlIMG);
       }
    }, [ImageData]);
+
+   function Logout() {
+      Cookies.remove("access_token", {
+         path: "/",
+         secure: true, // Opsional: Hanya jika cookie menggunakan HTTPS
+         httpOnly: true, // Opsional: Hanya jika cookie ditandai sebagai HttpOnly
+      });
+      setTimeout(() => {
+         routes.push({
+            pathname: "/",
+         });
+      }, [1000]);
+   }
 
    console.log(NotlpPendaftar);
    console.log(NotlpPendaftar && NotlpPendaftar.length);
@@ -119,6 +173,22 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
                      <div className="subheader text-[14px] text-[#0000007b]">
                         Formulir untuk pembuatan data karyawan baru yang masuk
                         di perusahaan anda
+                     </div>
+                  </div>
+               ) : formType == "Logout" ? (
+                  <div className="text-[24px] font-semibold text-black mb-3">
+                     LOGOUT
+                  </div>
+               ) : formType == "Pembukuan" ? (
+                  <div className="flex justify-between">
+                     <div className="text-[24px] font-semibold text-black mb-3">
+                        Pembukuan
+                     </div>
+                     <div
+                        onClick={() => statusModal()}
+                        className="cursor-pointer"
+                     >
+                        X
                      </div>
                   </div>
                ) : (
@@ -196,26 +266,72 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
                         />
                      </div>
                   </>
+               ) : formType == "Logout" ? (
+                  <div className="w-full flex flex-col items-center ">
+                     <img
+                        src="/assets/logout.png"
+                        width={260}
+                        className=""
+                     ></img>
+                     <div className="">
+                        Apakah kamu yakin akan keluar dari aplikasi ?
+                     </div>
+                  </div>
+               ) : formType == "Pembukuan" ? (
+                  <>
+                     <div className="flex flex-col gap-4">
+                        <div className="flex justify-between py-4 border-b-1">
+                           <div>Pendapatan</div>
+                           <div className="text-[green]">
+                              {FormatCurrency(dataPembukuan.DataPendapatan)}
+                           </div>
+                        </div>
+                        <div className="flex justify-between py-4 border-b-1">
+                           <div>Pengeluaran</div>
+                           <div className="text-[red]">
+                              {FormatCurrency(dataPembukuan.DataPengeluaran)}
+                           </div>
+                        </div>
+                     </div>
+                     <div className="flex justify-between items-center py-4">
+                        <div className="font-semibold">Hasil</div>
+                        <div
+                           className={`border-b-1 py-2 ${
+                              dataPembukuan.DataHasil < 0
+                                 ? "text-[red]"
+                                 : "text-[green]"
+                           } font-medium`}
+                        >
+                           {FormatCurrency(dataPembukuan.DataHasil)}
+                        </div>
+                     </div>
+                  </>
                ) : (
                   ""
                )}
-               {!(formType == "BuatDataKaryawan") && (
-                  <div className="flex flex-col gap-2 mt-4">
-                     <Input
-                        type="password"
-                        label="Password"
-                        className="w-full h-[48px] rounded-none"
-                        onChange={(e) => setPassword(e.target.value)}
-                     />
-                  </div>
-               )}
+               {!(formType == "BuatDataKaryawan") &&
+                  !(formType == "Logout") &&
+                  !(formType == "Pembukuan") && (
+                     <div className="flex flex-col gap-2 mt-4">
+                        <Input
+                           type="password"
+                           label="Password"
+                           className="w-full h-[48px] rounded-none"
+                           onChange={(e) => setPassword(e.target.value)}
+                        />
+                     </div>
+                  )}
                <div className="flex gap-3 mt-4">
-                  <Button
-                     className="w-full bg-[black] fs-bold tracking-[1px] text-white"
-                     onClick={() => statusModal()}
-                  >
-                     Kembali
-                  </Button>
+                  {!formType == "Pembukuan" ? (
+                     <Button
+                        className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                        onClick={() => statusModal()}
+                     >
+                        Kembali
+                     </Button>
+                  ) : (
+                     ""
+                  )}
                   {formType == "BuatDataKaryawan" ? (
                      Nama &&
                      Password &&
@@ -223,21 +339,54 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
                      NotlpPendaftar.length >= 10 &&
                      NotlpPendaftar.length <= 12 &&
                      TanggalLahirPendaftar ? (
-                        <Button
-                           className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]"
-                           onClick={() => SubmitAbsensi()}
-                        >
-                           Submit
-                        </Button>
+                        <>
+                           <Button
+                              className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                              onClick={() => statusModal()}
+                           >
+                              Kembali
+                           </Button>
+                           <Button
+                              className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]"
+                              onClick={() => SubmitAbsensi()}
+                           >
+                              Submit
+                           </Button>
+                        </>
                      ) : (
-                        <Button
-                           className="w-full bg-[#bcbcbc] fs-bold tracking-[1px]"
-                           disabled
-                           onClick={() => SubmitAbsensi()}
-                        >
-                           Submit
-                        </Button>
+                        <>
+                           <Button
+                              className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                              onClick={() => statusModal()}
+                           >
+                              Kembali
+                           </Button>
+                           <Button
+                              className="w-full bg-[#bcbcbc] fs-bold tracking-[1px]"
+                              disabled
+                              onClick={() => SubmitAbsensi()}
+                           >
+                              Submit
+                           </Button>{" "}
+                        </>
                      )
+                  ) : formType == "Logout" ? (
+                     <>
+                        <Button
+                           className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                           onClick={() => statusModal()}
+                        >
+                           Kembali
+                        </Button>
+                        <Button
+                           className="w-full bg-[red] text-white fs-bold tracking-[1px]"
+                           onClick={() => Logout()}
+                        >
+                           Logout
+                        </Button>
+                     </>
+                  ) : formType == "Pembukuan" ? (
+                     ""
                   ) : (
                      <Button
                         className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]"
@@ -251,6 +400,4 @@ const Absensi = ({ statusModal, Nama, formType, message }) => {
          </div>
       </>
    );
-};
-
-export default Absensi;
+}

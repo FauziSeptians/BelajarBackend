@@ -4,16 +4,20 @@ import Snackbar from "../component/snackbar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Spinner } from "@nextui-org/react";
 
-const Layout = ({
+export default function Layout({
    children,
    statusModalTrue,
    statusModalFalse,
    form,
-   dataUser,
-}) => {
+   Data,
+}) {
    const [message, setMessage] = useState("");
    const routes = useRouter(null);
+   const [loader, setLoader] = useState(false);
+   console.log("testz");
+   console.log(Data);
 
    useEffect(() => {
       const Validate = async () => {
@@ -41,55 +45,53 @@ const Layout = ({
       };
 
       Validate();
-   }, []);
+   }, [routes]);
 
    useEffect(() => {
       setTimeout(() => {
          setMessage("");
       }, 5000);
    }, [message]);
+
+   useEffect(() => {
+      setLoader(true);
+      setTimeout(() => {
+         setLoader(false);
+      }, 1000);
+   }, [routes]);
+
+   console.log(loader);
    return (
-      <div className="flex w-screen h-screen bg-black">
-         {message && <Snackbar message={message}></Snackbar>}
-         {statusModalTrue && (
-            <Absensi
-               statusModal={() => statusModalFalse()}
-               formType={form.type}
-               Nama={form.Nama}
-               message={(e) => setMessage(e)}
-            ></Absensi>
+      <>
+         {loader && (
+            <div className="fixed w-full h-screen  bg-[#b2b2b251] z-[1000000] flex justify-center items-center">
+               <Spinner label="Loading..." color="warning" size="lg" />
+            </div>
          )}
-         <Sidebar></Sidebar>
-         <div className="w-full bg-[#f7f7f8] overflow-hidden p-[30px]">
-            {children}
+         <div className="flex w-screen h-screen bg-black">
+            {/* {message && <Snackbar message={message}></Snackbar>} */}
+            {statusModalTrue && (
+               <Absensi
+                  statusModal={() => statusModalFalse()}
+                  formType={form.type}
+                  Nama={form.Nama}
+                  message={(e) => setMessage(e)}
+               ></Absensi>
+            )}
+            <Sidebar></Sidebar>
+            <div className="w-full bg-[#f7f7f8] overflow-y-auto p-[30px]">
+               {children}
+            </div>
          </div>
-      </div>
+      </>
    );
-};
-
-export async function getServerSideProps(context) {
-   const { query, req } = context;
-
-   let Data = {
-      Nama: query.id,
-      Token: req.cookies.access_token,
-   };
-
-   console.log(req.cookies.access_token);
-
-   const response = await axios
-      .post("http://localhost:5000/validateUser", Data, {
-         Headers: {
-            Authorization: `Bearer ${req.cookies.access_token}`,
-         },
-      })
-      .catch((err) => {
-         console.log(err.message);
-      });
-   console.log("testsss");
-   console.log(response);
-
-   return { props: { dataUser } };
 }
 
-export default Layout;
+export async function getServerSideProps({ context }) {
+   let Data = "awdawdwa";
+   console.log("mew");
+   console.log(Data);
+   return {
+      props: { Data },
+   };
+}

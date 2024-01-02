@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 const KaryawanControllers = require("./Controllers/KaryawanControllers");
 const TaskSchedullerController = require("./Controllers/TaskSchedullerController");
+const FiturController = require("./Controllers/FiturController");
+const PembukuanControllers = require("./Controllers/PembukuanController");
 const connectDB = require("./db");
 const authenticateToken = require("./Controllers/authController");
 const LoginControllers = require("./Controllers/loginController");
@@ -38,6 +40,10 @@ app.post("/getAllData", TaskSchedullerController.getAlltask);
 app.post("/validateUser", KaryawanControllers.validateLoginKaryawan);
 app.get("/getAllKaryawan", KaryawanControllers.getAllKaryawan);
 app.get("/getAllTaskKaryawan", TaskSchedullerController.getAlltaskKaryawan);
+app.post("/getsidebarfitur", FiturController.FiturSidebar);
+app.post("/Pembukuan", PembukuanControllers.PembukuanData);
+app.post("/getDatapembukuan", PembukuanControllers.GetDataPembukuan);
+app.post("/summarypembukuan", PembukuanControllers.SummaryPembukuan);
 
 app.get("/images/:ImageName", (req, res) => {
    const { ImageName } = req.params;
@@ -53,4 +59,3 @@ app.get("/images/:ImageName", (req, res) => {
    // Mengirimkan gambar sebagai respons
    res.sendFile(imagePath);
 });
-

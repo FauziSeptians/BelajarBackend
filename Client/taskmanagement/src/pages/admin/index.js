@@ -4,6 +4,8 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { User } from "@nextui-org/react";
+import Typed from "react-typed";
+import Greetings from "../component/greetings";
 
 export default function Admin({ Data, Modals }) {
    const Username = Data.Nama;
@@ -27,21 +29,23 @@ export default function Admin({ Data, Modals }) {
       });
    }
 
+   function PushDataPembukuan() {
+      routes.push({
+         pathname: "/adminpage/pembukuan",
+         query: {
+            id: Username,
+         },
+      });
+   }
+
    return (
       <>
          <section className=" w-full relative">
             <div className="content w-full h-screen">
-               <div className="Greetings text-[20px]">
-                  <div className="text-[28px] font-semibold tracking-[2px]">
-                     Hi,{" "}
-                     <span className="text-[24px] font-light tracking-[1px]">
-                        {Username}
-                     </span>
-                  </div>
-                  <div className="font-light text-[#000000ac]">
-                     Motivational Quotes
-                  </div>
-               </div>
+               <Greetings
+                  Username={Username}
+                  Modals={(e) => Modals(e)}
+               ></Greetings>
                <div className="mt-7 TaskManagement">
                   <div className="text-[20px] font-semibold tracking-[0.5px] pb-2 ">
                      Home Page
@@ -104,6 +108,26 @@ export default function Admin({ Data, Modals }) {
                            ></img>
                            <div className="text-[20px] font-semibold tracking-[1px]">
                               Data Pekerjaan Karyawan
+                           </div>
+                           <div className="text-[16px] text-[#000000ac]">
+                              Data Kehadiranmu dari kamu masuk kerja dan pulang
+                              kerja
+                           </div>
+                        </div>
+                        <div className="font-semibold">{">"}</div>
+                     </div>
+                     <div
+                        className="shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]"
+                        onClick={() => PushDataPembukuan()}
+                     >
+                        <div>
+                           <img
+                              src="./assets/kalender.jpg"
+                              width={80}
+                              className="mb-3"
+                           ></img>
+                           <div className="text-[20px] font-semibold tracking-[1px]">
+                              Pembukuaan Pendapatan dan Pengeluaran
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
                               Data Kehadiranmu dari kamu masuk kerja dan pulang

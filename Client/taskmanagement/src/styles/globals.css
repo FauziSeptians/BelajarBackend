@@ -25,3 +25,10 @@ body {
 .css-1anqmj6-MuiPopper-root-MuiPickersPopper-root {
    z-index: 1000000000 !important;
 }
+
+.bg-default-100 {
+   background-color: white !important;
+   outline-color: "#2424244" !important;
+   outline-style: "solid" !important;
+   outline-width: "0.5px" !important;
+}

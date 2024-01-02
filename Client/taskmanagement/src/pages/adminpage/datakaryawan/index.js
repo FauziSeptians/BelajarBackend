@@ -1,28 +1,86 @@
 import axios from "axios";
 import ConvertTanggal from "../../../../lib/TanggalConvert";
+import { useState } from "react";
+import { Pagination } from "@nextui-org/react";
+import Greetings from "@/pages/component/greetings";
 
-export default function dataAllKaryawan({ dataObject }) {
+export default function dataAllKaryawan({ dataObject, Modals }) {
    console.log(dataObject);
+
+   const [DataKaryawan, setDataKaryawan] = useState(dataObject.dataAllKaryawan);
+   const [SearchData, setSearchData] = useState(DataKaryawan);
+
+   function HandlingSearchInput(inputan) {
+      console.log(inputan);
+
+      console.log(inputan.toLowerCase());
+
+      if (inputan.length != 0) {
+         let filterData = DataKaryawan.filter((e) => {
+            console.log(e);
+            console.log(ConvertTanggal(e.TanggalKeanggotaan).toLowerCase());
+            if (
+               e.Nama.toLowerCase().includes(inputan.toLowerCase()) ||
+               e.Notelp.toLowerCase().includes(inputan.toLowerCase()) ||
+               e.Umur.toString()
+                  .toLowerCase()
+                  .includes(inputan.toLowerCase()) ||
+               ConvertTanggal(e.TanggalKeanggotaan)
+                  .toLowerCase()
+                  .includes(inputan.toLowerCase())
+            ) {
+               return e;
+            }
+         });
+
+         setSearchData(filterData);
+
+         console.log(filterData);
+      } else {
+         setSearchData(DataKaryawan);
+      }
+   }
+
+   function setNumberPaging(number) {
+      console.log(number);
+      let batasAtas = number * 10 - 1;
+      let batasbawah = batasAtas - 9;
+
+      let filterData = DataKaryawan.filter((e, index) => {
+         if (index >= batasbawah && index <= batasAtas) {
+            return e;
+         }
+      });
+
+      setSearchData(filterData);
+   }
+
+   console.log(SearchData);
+
    return (
       <section className=" w-full ">
          <div className="content w-full h-screen">
-            <div className="Greetings text-[20px]">
-               <div className="text-[28px] font-semibold tracking-[2px]">
-                  Hi,{" "}
-                  <span className="text-[24px] font-light tracking-[1px]">
-                     {dataObject.User}
-                  </span>
-               </div>
-               <div className="font-light text-[#000000ac]">
-                  Motivational Quotes
-               </div>
-            </div>
+            <Greetings
+               Username={dataObject.User}
+               Modals={(e) => Modals(e)}
+            ></Greetings>
+
             <div className="mt-7 TaskManagement ">
-               <div className="text-[20px] font-semibold tracking-[0.5px] pb-2 ">
-                  TASK MANAGEMENT
+               <div className="flex justify-between items-center">
+                  <div className="text-[24px] font-semibold tracking-[0.5px] pb-2 ">
+                     TASK MANAGEMENT
+                  </div>
+                  <div>
+                     <input
+                        type="text"
+                        placeholder="Search"
+                        onChange={(e) => HandlingSearchInput(e.target.value)}
+                        className="rounded-lg h-[40px] w-[400px] outline p-3 outline-[#2424244b] outline-[0.5px]"
+                     ></input>
+                  </div>
                </div>
-               <div className="flex flex-col gap-5 mt-3 text-center font-semibold tracking-wider">
-                  <div className="grid grid-cols-12 bg-[#00000030] p-3">
+               <div className="flex flex-col gap-5 mt-5 text-center ">
+                  <div className="grid grid-cols-12 bg-[#000000] text-[#8bcf1d] tracking-[2px] p-5 rounded-t-[10px]">
                      <div className="col-span-1 ">No</div>
                      <div className="col-span-3 ">Nama</div>
                      <div className="col-span-2 ">Notelp</div>
@@ -30,34 +88,48 @@ export default function dataAllKaryawan({ dataObject }) {
                      <div className="col-span-4 ">TanggalKeanggotaan</div>
                   </div>
                </div>
-               {dataObject.dataAllKaryawan.length != 0 ? (
-                  dataObject.dataAllKaryawan.map((item, index) => {
-                     return (
-                        <div className="flex flex-col gap-5 text-center">
-                           <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
-                              <div className="col-span-1 ">{index + 1}</div>
-                              <div className="col-span-3  ">{item.Nama}</div>
-                              <div className="col-span-2 ">{item.Notelp}</div>
-                              <div className="col-span-2 ">{item.Umur}</div>
-                              <div className="col-span-4 break-all p-3">
-                                 {item.TanggalKeanggotaan &&
-                                    ConvertTanggal(item.TanggalKeanggotaan)}
+               <div className="min-h-[600px]">
+                  {SearchData.length != 0 ? (
+                     SearchData.map((item, index) => {
+                        return (
+                           <div className="flex flex-col gap-5 text-center">
+                              <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
+                                 <div className="col-span-1 ">{index + 1}</div>
+                                 <div className="col-span-3  ">{item.Nama}</div>
+                                 <div className="col-span-2 ">
+                                    {item.Notelp}
+                                 </div>
+                                 <div className="col-span-2 ">{item.Umur}</div>
+                                 <div className="col-span-4 break-all p-3">
+                                    {item.TanggalKeanggotaan &&
+                                       ConvertTanggal(item.TanggalKeanggotaan)}
+                                 </div>
                               </div>
                            </div>
+                        );
+                     })
+                  ) : (
+                     <div className="flex flex-col gap-5 text-center">
+                        <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
+                           <div className="col-span-1 ">-</div>
+                           <div className="col-span-3  ">-</div>
+                           <div className="col-span-2 ">-</div>
+                           <div className="col-span-2 ">-</div>
+                           <div className="col-span-4   break-all p-1">-</div>
                         </div>
-                     );
-                  })
-               ) : (
-                  <div className="flex flex-col gap-5 text-center">
-                     <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
-                        <div className="col-span-1 ">-</div>
-                        <div className="col-span-3  ">-</div>
-                        <div className="col-span-2 ">-</div>
-                        <div className="col-span-2 ">-</div>
-                        <div className="col-span-4   break-all p-1">-</div>
                      </div>
-                  </div>
-               )}
+                  )}
+               </div>
+            </div>
+            <div className="w-full flex justify-center mt-5">
+               <Pagination
+                  loop
+                  showControls
+                  color="success"
+                  total={Math.ceil(SearchData.length / 10)}
+                  initialPage={1}
+                  onChange={(e) => setNumberPaging(e)}
+               />
             </div>
          </div>
       </section>
@@ -85,5 +157,12 @@ export async function getServerSideProps(context) {
       return {
          props: { dataObject },
       };
-   } catch (error) {}
+   } catch (error) {
+      return {
+         redirect: {
+            destination: "/", // Ganti dengan rute halaman yang sesuai
+            permanent: false,
+         },
+      };
+   }
 }
