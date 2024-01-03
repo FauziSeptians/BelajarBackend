@@ -71,8 +71,8 @@ export default function Admin({ Data, Modals }) {
                               Buat Data Karyawan
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
+                              Formulir untuk pembuatan data karyawan baru yang
+                              masuk di perusahaan anda
                            </div>
                         </div>
                         <div className="font-semibold">{">"}</div>
@@ -102,16 +102,15 @@ export default function Admin({ Data, Modals }) {
                      >
                         <div>
                            <img
-                              src="./assets/kalender.jpg"
-                              width={80}
+                              src="./assets/karyawan.jpg"
+                              width={100}
                               className="mb-3"
                            ></img>
                            <div className="text-[20px] font-semibold tracking-[1px]">
                               Data Pekerjaan Karyawan
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
+                             Data data list tugas yang sudah diselesaikan oleh karyawan
                            </div>
                         </div>
                         <div className="font-semibold">{">"}</div>
@@ -122,16 +121,15 @@ export default function Admin({ Data, Modals }) {
                      >
                         <div>
                            <img
-                              src="./assets/kalender.jpg"
-                              width={80}
+                              src="./assets/journaling.jpg"
+                              width={100}
                               className="mb-3"
                            ></img>
                            <div className="text-[20px] font-semibold tracking-[1px]">
                               Pembukuaan Pendapatan dan Pengeluaran
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
+                             Data perihal pemasukan dan pengeluaran perusahaan
                            </div>
                         </div>
                         <div className="font-semibold">{">"}</div>

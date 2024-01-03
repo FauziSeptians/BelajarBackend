@@ -155,6 +155,7 @@ export default function Absensi({
             pathname: "/",
          });
       }, [1000]);
+      statusModal();
    }
 
    console.log(NotlpPendaftar);
@@ -387,13 +388,48 @@ export default function Absensi({
                      </>
                   ) : formType == "Pembukuan" ? (
                      ""
+                  ) : formType == "Masuk" ? (
+                     <>
+                        <Button
+                           className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                           onClick={() => statusModal()}
+                        >
+                           Kembali
+                        </Button>
+                        <Button
+                           className={`w-full ${
+                              ImageData && Password
+                                 ? "bg-[#b4fe3a] cursor-pointer"
+                                 : "bg-[#bcbcbc]"
+                           } fs-bold tracking-[1px]`}
+                           disabled={ImageData && Password ? false : true}
+                           onClick={() => SubmitAbsensi()}
+                        >
+                           Submit
+                        </Button>
+                     </>
+                  ) : formType == "Pulang" ? (
+                     <>
+                        <Button
+                           className="w-full bg-[black] fs-bold tracking-[1px] text-white"
+                           onClick={() => statusModal()}
+                        >
+                           Kembali
+                        </Button>
+                        <Button
+                           className={`w-full ${
+                              Description && Password
+                                 ? "bg-[#b4fe3a] cursor-pointer"
+                                 : "bg-[#bcbcbc]"
+                           } fs-bold tracking-[1px]`}
+                           disabled={Description && Password ? false : true}
+                           onClick={() => SubmitAbsensi()}
+                        >
+                           Submit
+                        </Button>
+                     </>
                   ) : (
-                     <Button
-                        className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]"
-                        onClick={() => SubmitAbsensi()}
-                     >
-                        Submit
-                     </Button>
+                     ""
                   )}
                </div>
             </div>

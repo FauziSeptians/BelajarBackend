@@ -23,7 +23,7 @@ export default function TaskManagement({ dataObject, Modals }) {
                   TASK MANAGEMENT
                </div>
                <div className="flex flex-col gap-5 mt-3 text-center font-semibold tracking-wider">
-                  <div className="grid grid-cols-12 bg-[#00000030] p-3">
+                  <div className="grid grid-cols-12 bg-[#000000] text-[#8bcf1d] tracking-[2px] p-5 rounded-t-[10px]">
                      <div className="col-span-1 ">No</div>
                      <div className="col-span-3 ">Tanggal Masuk</div>
                      <div className="col-span-2 ">Jam Masuk</div>

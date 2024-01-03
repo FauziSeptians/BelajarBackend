@@ -22,7 +22,7 @@ const upload = multer({ storage });
 app.listen(port, () => {
    console.log(`'listen to port ${port}'`);
 });
-
+app.post("/loginadmin", LoginControllers.LoginAdminControllers);
 app.get("/", function (req, res) {
    res.status(200).send({ message: "Status Success" });
 });

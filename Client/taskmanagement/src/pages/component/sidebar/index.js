@@ -34,30 +34,8 @@ export default function Sidebar({ repo }) {
 
    console.log(router.query);
    return (
-      <div className="h-full w-[300px] bg-[#8bcf1d] pt-[30px]">
+      <div className="h-full w-[300px] bg-[#8bcf1d] pt-[30px] flex flex-col justify-between">
          <div className="flex flex-col gap-3">
-            {/* <div
-               className="bg-[black] text-white font-semibold tracking-[1px] p-3 cursor-pointer"
-               onClick={() => {
-                  router.push({
-                     pathname: "/pekerja",
-                     query: { id: Nama },
-                  });
-               }}
-            >
-               Absensi
-            </div>
-            <div
-               className="bg-[black] text-white font-semibold tracking-[1px] p-3 cursor-pointer"
-               onClick={() => {
-                  router.push({
-                     pathname: "/taskmanagement",
-                     query: { id: Nama },
-                  });
-               }}
-            >
-               Manajemen Tugas
-            </div> */}
             {Menu.map((el) => {
                return (
                   <div
@@ -74,34 +52,17 @@ export default function Sidebar({ repo }) {
                );
             })}
          </div>
+         <div className="p-4 flex justify-evenly items-center">
+            <div>
+               <img src="/assets/gmail.png" width={24}></img>
+            </div>
+            <div>
+               <img src="/assets/youtube.png" width={24}></img>
+            </div>
+            <div>
+               <img src="/assets/youtube.png" width={24}></img>
+            </div>
+         </div>
       </div>
    );
 }
-
-// export async function getServerSideProps(context) {
-//    const { query, req } = context;
-
-//    console.log("test");
-
-//    // const response = await axios.post("/api/validateUser", Data);
-//    // const Role = response.data.additionalData.role;
-
-//    const resp = await axios.post(
-//       "http://localhost:3000/api/fiturSidebar",
-//       "test"
-//    );
-
-//    console.log(resp);
-
-//    let Data = {
-//       Nama: query.id,
-//       access_token: req.cookies.access_token,
-//       SidebarData: resp.data.additionalData,
-//    };
-
-//    const Datas = {
-//       test: "test",
-//    };
-//    console.log(Data);
-//    return { props: { Datas } };
-// }

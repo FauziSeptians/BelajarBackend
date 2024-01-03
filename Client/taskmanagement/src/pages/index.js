@@ -64,6 +64,54 @@ export default function Home() {
       }
    };
 
+   const LoginAdmin = async () => {
+      try {
+         const response = await axios.post("/api/loginadmin", {
+            Nama: InputanNama,
+            Password: InputanPassword,
+         });
+         console.log(response.data);
+         if (response.data.status == 200) {
+            setMessageLogin(response.data.message);
+            response.data.additionalData.Role == "Admin"
+               ? setTimeout(() => {
+                    router.push({
+                       pathname: "/admin",
+                       query: {
+                          id: response.data.additionalData.Nama,
+                       },
+                    });
+                 }, 2000)
+               : setTimeout(() => {
+                    router.push({
+                       pathname: "/pekerja",
+                       query: {
+                          id: response.data.additionalData.Nama,
+                       },
+                    });
+                 }, 2000);
+
+            Cookies.set(
+               "access_token",
+               response.data.additionalData.accessToken,
+               {
+                  expires: 365,
+                  secure: true,
+                  sameSite: "strict",
+               }
+            );
+         } else {
+            console.log(response.data.message);
+            setMessageLogin(response.data.message);
+            setTimeout(() => {
+               setMessageLogin(null);
+            }, 3000);
+         }
+      } catch (error) {
+         console.error("Error:", error.response); // Tampilkan detail kesalahan dari server
+      }
+   };
+
    console.log(messageLogin);
 
    console.log("tokenns", Cookies.get("access_token"));
@@ -131,7 +179,10 @@ export default function Home() {
                         label="Password"
                         className="w-full h-[48px] rounded-none"
                      />
-                     <Button className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]">
+                     <Button
+                        className="w-full bg-[#b4fe3a] fs-bold tracking-[1px]"
+                        onClick={() => LoginAdmin()}
+                     >
                         Submit
                      </Button>
                   </div>

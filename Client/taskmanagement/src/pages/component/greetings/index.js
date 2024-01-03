@@ -2,8 +2,8 @@ import Typed from "react-typed";
 
 const Greetings = ({ Username, Modals }) => {
    let dates = new Date();
-   let Jam = dates.getHours();
-   let Menit = dates.getMinutes();
+   let Jam = dates.getHours().toString().padStart(2, "0");
+   let Menit = dates.getMinutes().toString().padStart(2, "0");
    return (
       <>
          <div className="flex  justify-between items-center">

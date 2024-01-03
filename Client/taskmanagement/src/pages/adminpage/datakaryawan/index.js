@@ -3,12 +3,14 @@ import ConvertTanggal from "../../../../lib/TanggalConvert";
 import { useState } from "react";
 import { Pagination } from "@nextui-org/react";
 import Greetings from "@/pages/component/greetings";
+import { useRouter } from "next/router";
 
 export default function dataAllKaryawan({ dataObject, Modals }) {
    console.log(dataObject);
 
    const [DataKaryawan, setDataKaryawan] = useState(dataObject.dataAllKaryawan);
    const [SearchData, setSearchData] = useState(DataKaryawan);
+   const router = useRouter(null);
 
    function HandlingSearchInput(inputan) {
       console.log(inputan);
@@ -55,6 +57,11 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
       setSearchData(filterData);
    }
 
+   function Whatsapp(value) {
+      const whatsappURL = `https://wa.me/${value}`;
+      const newWindow = window.open(whatsappURL, "_blank");
+   }
+
    console.log(SearchData);
 
    return (
@@ -88,7 +95,9 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
                      <div className="col-span-4 ">TanggalKeanggotaan</div>
                   </div>
                </div>
-               <div className="min-h-[600px]">
+               <div
+                  className={`${SearchData.length > 10 ? "min-h-[600px]" : ""}`}
+               >
                   {SearchData.length != 0 ? (
                      SearchData.map((item, index) => {
                         return (
@@ -96,7 +105,10 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
                               <div className="grid grid-cols-12 min-h-[48px] border-y-1 border-[#00000030] items-center">
                                  <div className="col-span-1 ">{index + 1}</div>
                                  <div className="col-span-3  ">{item.Nama}</div>
-                                 <div className="col-span-2 ">
+                                 <div
+                                    className="col-span-2 cursor-pointer"
+                                    onClick={() => Whatsapp(item.Notelp)}
+                                 >
                                     {item.Notelp}
                                  </div>
                                  <div className="col-span-2 ">{item.Umur}</div>
@@ -124,8 +136,10 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
             <div className="w-full flex justify-center mt-5">
                <Pagination
                   loop
-                  showControls
-                  color="success"
+                  showControls={
+                     Math.ceil(SearchData.length / 10) == 1 ? false : true
+                  }
+                  color=""
                   total={Math.ceil(SearchData.length / 10)}
                   initialPage={1}
                   onChange={(e) => setNumberPaging(e)}

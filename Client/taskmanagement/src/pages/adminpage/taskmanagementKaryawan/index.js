@@ -77,7 +77,9 @@ export default function TaskManagementKaryawan({ dataObject, Modals }) {
                      <div className="col-span-4 ">Deskripsi</div>
                   </div>
                </div>
-               <div className="min-h-[600px]">
+               <div
+                  className={`${SearchData.length > 10 ? "min-h-[600px]" : ""}`}
+               >
                   {SearchData.length != 0 ? (
                      SearchData.map((item, index) => {
                         return (
@@ -122,8 +124,10 @@ export default function TaskManagementKaryawan({ dataObject, Modals }) {
             <div className="mt-5 w-full flex justify-center">
                <Pagination
                   loop
-                  showControls
-                  color="success"
+                  showControls={
+                     Math.ceil(SearchData.length / 10) == 1 ? false : true
+                  }
+                  color=""
                   total={Math.ceil(SearchData.length / 10)}
                   initialPage={1}
                />

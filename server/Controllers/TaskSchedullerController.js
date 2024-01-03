@@ -10,8 +10,6 @@ exports.AbsenMasuk = async (req, res) => {
    console.log(req.file);
 
    const { Nama, Password } = req.body;
-   // console.log(req.body);
-   // console.log(Nama);
 
    try {
       let dataID = await KaryawanModel.findOne(
@@ -20,7 +18,7 @@ exports.AbsenMasuk = async (req, res) => {
       );
 
       if (dataID == null) {
-         throw new Error("dataId not found");
+         throw new Error("Passwords do not match");
       }
       let existData = await JadwalPekerjaModel.findOne({
          IDPekerja: dataID,
@@ -145,7 +143,10 @@ exports.getAlltask = async function async(req, res) {
 
 exports.getAlltaskKaryawan = async function (req, res) {
    try {
-      const data = await JadwalPekerjaModel.find().populate("IDPekerja","Nama");
+      const data = await JadwalPekerjaModel.find().populate(
+         "IDPekerja",
+         "Nama"
+      );
 
       console.log(data);
 

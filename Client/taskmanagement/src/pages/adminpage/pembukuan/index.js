@@ -125,16 +125,21 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
             if (
                e.Deskripsi.toLowerCase().includes(inputan.toLowerCase()) ||
                e.Kategori.toLowerCase().includes(inputan.toLowerCase()) ||
-               e.Jumlah.toString().toLowerCase().includes(inputan.toLowerCase()) || 
-               e.Harga.toString().toLowerCase().includes(inputan.toLowerCase()) || 
-               e.TotalHarga.toString().toLowerCase().includes(inputan.toLowerCase())
+               e.Jumlah.toString()
+                  .toLowerCase()
+                  .includes(inputan.toLowerCase()) ||
+               e.Harga.toString()
+                  .toLowerCase()
+                  .includes(inputan.toLowerCase()) ||
+               e.TotalHarga.toString()
+                  .toLowerCase()
+                  .includes(inputan.toLowerCase())
             ) {
                return e;
             }
          });
 
          setSearchData(filterData);
-
       } else {
          setSearchData(dataObject.dataPembukuan);
       }
@@ -261,7 +266,12 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
                </div>
 
                <div className="mt-10 flex justify-between  items-center">
-                  <div className="bg-[#b4fe3a] fs-bold tracking-[1px] px-4 py-2 rounded-md cursor-pointer" onClick={() => Modals({type : "Pembukuan", Nama : dataObject.User})}>
+                  <div
+                     className="bg-[#b4fe3a] fs-bold tracking-[1px] px-4 py-2 rounded-md cursor-pointer"
+                     onClick={() =>
+                        Modals({ type: "Pembukuan", Nama: dataObject.User })
+                     }
+                  >
                      Summary
                   </div>
                   <div>
@@ -285,9 +295,7 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
                   </div>
                </div>
                <div
-                  className={`${
-                     SearchData.length > 10 ? "min-h-[600px]" : ""
-                  }`}
+                  className={`${SearchData.length > 10 ? "min-h-[600px]" : ""}`}
                >
                   {SearchData.length != 0 ? (
                      SearchData.map((item, index) => {
@@ -338,11 +346,9 @@ export default function dataAllKaryawan({ dataObject, Modals }) {
                <Pagination
                   loop
                   showControls={
-                     Math.ceil(SearchData.length / 10) == 1
-                        ? false
-                        : true
+                     Math.ceil(SearchData.length / 10) == 1 ? false : true
                   }
-                  color="success"
+                  color=""
                   total={Math.ceil(SearchData.length / 10)}
                   initialPage={1}
                   onChange={(e) => setNumberPaging(e)}

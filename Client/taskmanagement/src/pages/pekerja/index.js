@@ -87,7 +87,7 @@ export default function Pekerja({ Data, Modals }) {
                         <div className="font-semibold">{">"}</div>
                      </div>
                      <div
-                        className="shadow-md p-5 min-h-[200px] rounded-xl flex items-center gap-6 cursor-pointer bg-[#ffffff72]"
+                        className="shadow-md p-5 min-h-[200px] rounded-xl flex justify-between items-center gap-6 cursor-pointer bg-[#ffffff72]"
                         onClick={() => pushPath()}
                      >
                         <div>
@@ -100,8 +100,7 @@ export default function Pekerja({ Data, Modals }) {
                               Manajemen Tugas
                            </div>
                            <div className="text-[16px] text-[#000000ac]">
-                              Data Kehadiranmu dari kamu masuk kerja dan pulang
-                              kerja
+                              List kerjaan yang selama ini kamu lakukan
                            </div>
                         </div>
                         <div className="font-semibold">{">"}</div>

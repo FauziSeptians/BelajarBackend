@@ -69,7 +69,7 @@ export default function Layout({
             </div>
          )}
          <div className="flex w-screen h-screen bg-black">
-            {/* {message && <Snackbar message={message}></Snackbar>} */}
+            {message && <Snackbar messageLogin={message}></Snackbar>}
             {statusModalTrue && (
                <Absensi
                   statusModal={() => statusModalFalse()}

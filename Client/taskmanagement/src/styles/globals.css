@@ -32,3 +32,8 @@ body {
    outline-style: "solid" !important;
    outline-width: "0.5px" !important;
 }
+
+.bg-primary {
+   background-color: #b4fe3a !important;
+   color : black !important;
+}
